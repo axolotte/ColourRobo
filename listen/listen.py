@@ -1,5 +1,7 @@
 """ Abgewandelt nach: Say 'hello, you' each time a human face is detected
     Cannot be tested on simulated robot
+
+    Say "okay I heard you" when spoken colour is detected
 """
 
 import sys
@@ -11,7 +13,7 @@ from naoqi import ALModule
 
 from optparse import OptionParser
 
-NAO_IP = "nao.local"
+NAO_IP = "nao2.local"
 
 
 # Global variable to store the ColourOrder module instance
@@ -19,7 +21,7 @@ ColourOrder = None
 memory = None
 
 
-class SpeechDetection(ALModule):
+class ColourOrderModule(ALModule):
     """ A simple module able to react
     to speech events
 
@@ -37,7 +39,13 @@ class SpeechDetection(ALModule):
         memory = ALProxy("ALMemory")
         speech = ALProxy("ALSpeechRecognition")
         # List of colours which can be recognized
-        speech.setVocabulary(["red","blue","black"])
+
+        speech.pause(True)
+
+        speech.setVocabulary(["red", "blue", "black", "white"], False)
+
+        speech.pause(False)
+
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
             "onColourDetected")
@@ -47,12 +55,18 @@ class SpeechDetection(ALModule):
         detected.
 
         """
+        #read recognized word from memory
+        words = memory.getData("WordRecognized")
+
         # Unsubscribe to the event when reacting,
         # to avoid repetitions
         memory.unsubscribeToEvent("WordRecognized",
             "ColourOrder")
 
-        self.tts.say("Okay, I heard you.")
+
+        word  = words[0]
+        str = "You said %s"%word
+        self.tts.say(str)
         #TO DO: next step: vision module --> find colour/point to colour
 
         # Subscribe again to the event
@@ -95,7 +109,7 @@ def main():
     # The name given to the constructor must be the name of the
     # variable
     global ColourOrder
-    ColourOrder = ColourOrder("ColourOrder")
+    ColourOrder = ColourOrderModule("ColourOrder")
 
     try:
         while True:
