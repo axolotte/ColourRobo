@@ -34,8 +34,8 @@ class ImageWidget(QWidget):
         self._videoProxy = None
 
         #Proxy to ALBlobDetection
-        self._blobProxy = None
-        memory
+        #self._blobProxy = None
+        #memory
         # Our video module name.
         self._imgClient = ""
 
@@ -73,7 +73,7 @@ class ImageWidget(QWidget):
         """
         if self._imgClient != "":
             self._videoProxy.unsubscribe(self._imgClient)
-            self._blobProxy.unsubscribe(self.)
+            #self._blobProxy.unsubscribe(self)
 
 
 

@@ -25,22 +25,13 @@ class ColorDetection(ALModule):
     def __init__(self, name):
         #TODO nur einmal!!
         ALModule.__init__(self, name)
-        # No need for IP and port here because
-        # we have our Python broker connected to NAOqi broker
-
-        # Create a proxy to ALTextToSpeech for later use
-        self.tts = ALProxy("ALTextToSpeech")
-
+        
         # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
         self._blobProxy = ALProxy("ALColorBlobDetection")
         self._blobProxy.setColor(255,0,0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
-        self.photoCaptureProxy = ALProxy("ALPhotoCapture")
-        self.photoCaptureProxy.setResolution(2)
-        self.photoCaptureProxy.setPictureFormat("jpg")
-
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
@@ -57,9 +48,7 @@ class ColorDetection(ALModule):
         print self._getCircle
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
-        self.photoCaptureProxy.takePictures(3, "/home/nao/recordings/cameras/", "image")
-        #self.tts.say("I can see that color!")
-        print self.photoCaptureProxy.getCameraID()
+
         # Subscribe again to the event
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
