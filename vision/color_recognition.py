@@ -9,6 +9,7 @@ from naoqi import ALModule
 from optparse import OptionParser
 
 NAO_IP = "nao2.local"
+#NAO_IP = "localhost"
 
 
 # Global variable to store the HumanGreeter module instance
@@ -22,6 +23,7 @@ class ColorDetection(ALModule):
 
     """
     def __init__(self, name):
+        #TODO nur einmal!!
         ALModule.__init__(self, name)
         # No need for IP and port here because
         # we have our Python broker connected to NAOqi broker
@@ -29,12 +31,16 @@ class ColorDetection(ALModule):
         # Create a proxy to ALTextToSpeech for later use
         self.tts = ALProxy("ALTextToSpeech")
 
-        # Subscribe to the FaceDetected event:
+        # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
         self._blobProxy = ALProxy("ALColorBlobDetection")
         self._blobProxy.setColor(255,0,0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
+        self.photoCaptureProxy = ALProxy("ALPhotoCapture")
+        self.photoCaptureProxy.setResolution(2)
+        self.photoCaptureProxy.setPictureFormat("jpg")
+
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
@@ -51,9 +57,9 @@ class ColorDetection(ALModule):
         print self._getCircle
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
-
-        self.tts.say("I can see that color!")
-
+        self.photoCaptureProxy.takePictures(3, "/home/nao/recordings/cameras/", "image")
+        #self.tts.say("I can see that color!")
+        print self.photoCaptureProxy.getCameraID()
         # Subscribe again to the event
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
@@ -83,14 +89,14 @@ def main():
     # We need this broker to be able to construct
     # NAOqi modules and subscribe to other modules
     # The broker must stay alive until the program exists
-    myBroker = ALBroker("myBroker",
+    colorBroker = ALBroker("colorBroker",
        "0.0.0.0",   # listen to anyone
        0,           # find a free port and use it
        pip,         # parent broker IP
        pport)       # parent broker port
 
 
-    # Warning: HumanGreeter must be a global variable
+    # Warning: colorBlob must be a global variable
     # The name given to the constructor must be the name of the
     # variable
     global colorBlob
@@ -102,7 +108,7 @@ def main():
     except KeyboardInterrupt:
         print
         print "Interrupted by user, shutting down"
-        myBroker.shutdown()
+        colorBroker.shutdown()
         sys.exit(0)
 
 
