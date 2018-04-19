@@ -24,11 +24,7 @@ class ColorDetectionModule(ALModule):
     """
     def __init__(self, name):
         ALModule.__init__(self, name)
-        # No need for IP and port here because
-        # we have our Python broker connected to NAOqi broker
 
-        # Create a proxy to ALTextToSpeech for later use
-        self.tts = ALProxy("ALTextToSpeech")
 
         # Subscribe to the ColorRecognition event:
         global memory
@@ -40,16 +36,11 @@ class ColorDetectionModule(ALModule):
         self._blobProxy = ALProxy("ALColorBlobDetection")
         self._blobProxy.setColor(255, 0, 0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
-        self.photoCaptureProxy = ALProxy("ALPhotoCapture")
-        self.photoCaptureProxy.setResolution(2)
-        self.photoCaptureProxy.setPictureFormat("jpg")
 
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
                                 "colorBlob",
                                 "onColorDetected")
-
-        self.tts.say("ColorDetection initialized")
 
         print("subscribe to Blop")
 
@@ -63,11 +54,10 @@ class ColorDetectionModule(ALModule):
         # to avoid repetitions
         self._getCircle = self._blobProxy.getCircle()
         print self._getCircle
+
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
-        self.photoCaptureProxy.takePictures(3, "/home/nao/recordings/cameras/", "image")
-        #self.tts.say("I can see that color!")
-        print self.photoCaptureProxy.getCameraID()
+
         # Subscribe again to the event
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
@@ -108,7 +98,7 @@ def main():
     # The name given to the constructor must be the name of the
     # variable
     global colorBlob
-    colorBlob = ColorDetection("colorBlob")
+    colorBlob = ColorDetectionModule("colorBlob")
 
     try:
         while True:
