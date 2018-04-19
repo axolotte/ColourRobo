@@ -38,16 +38,15 @@ class ColourOrderModule(ALModule):
         global memory
         memory = ALProxy("ALMemory")
 
-
-
         speech = ALProxy("ALSpeechRecognition")
 
+        #module for detecting color through vision
+        global ColorDetection
+        ColorDetection = ColorDetectionModule("ColorDetection")
+
         # List of colours which can be recognized
-
         speech.pause(True)
-
         speech.setVocabulary(["red", "blue", "black", "white"], False)
-
         speech.pause(False)
 
         # Subscribe to the WordRecognized event:
@@ -55,16 +54,12 @@ class ColourOrderModule(ALModule):
             "ColourOrder",
            "onColorHeard")
 
-        """memory.subscribeToEvent("NAOqiReady",
-                                "ColourOrder",
-                                "onColorHeard")"""
 
     def onColorHeard(self, *_args):
         """ This will be called each time a colour order (spoken) is
         detected.
 
         """
-
         #read recognized word from memory
         words = memory.getData("WordRecognized")
 
@@ -73,7 +68,6 @@ class ColourOrderModule(ALModule):
         memory.unsubscribeToEvent("WordRecognized",
             "ColourOrder")
 
-        #memory.unsubscribeToEvent("NAOqiReady","ColourOrder")
 
         word = words[0]
         str = "You said %s"%word
@@ -81,18 +75,14 @@ class ColourOrderModule(ALModule):
 
         #Call ColorDetection from vision module, so colour can be recgonized
         #subscribes to BlopDetection event
-        #ColorDetection.subscribeToBlopEvent()
-
-        global ColorDetection
-        ColorDetection = ColorDetectionModule("ColorDetection")
+        ColorDetection.subscribeToBlopDetection(word)
+        time.sleep(100)
 
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
             "onColorHeard")
-        #memory.subscribeToEvent("NAOqiReady",
-         #                       "ColourOrder",
-          #                      "onColourDetected")
+
 
 def main():
     """ Main entry point
@@ -124,7 +114,7 @@ def main():
        pport)       # parent broker port
 
 
-    # Warning: HumanGreeter must be a global variable
+    # Warning: ColourOrder must be a global variable
     # The name given to the constructor must be the name of the
     # variable
     global ColourOrder

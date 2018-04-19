@@ -23,7 +23,6 @@ class ColorDetectionModule(ALModule):
 
     """
     def __init__(self, name):
-        #TODO nur einmal!!
         ALModule.__init__(self, name)
         # No need for IP and port here because
         # we have our Python broker connected to NAOqi broker
@@ -34,9 +33,6 @@ class ColorDetectionModule(ALModule):
         # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
-
-
-
 
 
     def subscribeToBlopDetection(self,color):
@@ -53,7 +49,7 @@ class ColorDetectionModule(ALModule):
                                 "colorBlob",
                                 "onColorDetected")
 
-        self.tts.say("ColorDetecion initialized")
+        self.tts.say("ColorDetection initialized")
 
         print("subscribe to Blop")
 
