@@ -11,12 +11,12 @@ from optparse import OptionParser
 NAO_IP = "nao2.local"
 
 
-# Global variable to store the HumanGreeter module instance
+# Global variable to store the colorBlob module instance
 colorBlob = None
 memory = None
 
 
-class ColorDetection(ALModule):
+class ColorDetectionModule(ALModule):
     """ A simple module able to react
     to colordetection events
 
@@ -32,13 +32,25 @@ class ColorDetection(ALModule):
         # Subscribe to the FaceDetected event:
         global memory
         memory = ALProxy("ALMemory")
+
+
+
+
+
+    def subscribeToBlopDetection(self,color):
+        """subscribe to blop event"""
         self._blobProxy = ALProxy("ALColorBlobDetection")
-        self._blobProxy.setColor(255,0,0, 50)
+        self._blobProxy.setColor(255, 0, 0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
-            "colorBlob",
-            "onColorDetected")
+                                "colorBlob",
+                                "onColorDetected")
+
+        self.tts.say("ColorDetecion initialized")
+
+        print("subscribe to Blop")
+
 
     def onColorDetected(self, *_args):
         """ This will be called each time a face is

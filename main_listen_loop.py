@@ -11,6 +11,7 @@ from naoqi import ALBroker
 from naoqi import ALModule
 
 from optparse import OptionParser
+from vision.color_recognition import ColorDetectionModule
 
 NAO_IP = "nao2.local"
 
@@ -18,6 +19,7 @@ NAO_IP = "nao2.local"
 # Global variable to store the ColourOrder module instance
 ColourOrder = None
 memory = None
+ColorDetection = None
 
 
 class ColourOrderModule(ALModule):
@@ -33,10 +35,13 @@ class ColourOrderModule(ALModule):
         # Create a proxy to ALTextToSpeech for later use
         self.tts = ALProxy("ALTextToSpeech")
 
-        # Subscribe to the WordRecognized event:
         global memory
         memory = ALProxy("ALMemory")
+
+
+
         speech = ALProxy("ALSpeechRecognition")
+
         # List of colours which can be recognized
 
         speech.pause(True)
@@ -45,15 +50,21 @@ class ColourOrderModule(ALModule):
 
         speech.pause(False)
 
+        # Subscribe to the WordRecognized event:
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
-            "onColourDetected")
+           "onColorHeard")
 
-    def onColourDetected(self, *_args):
+        """memory.subscribeToEvent("NAOqiReady",
+                                "ColourOrder",
+                                "onColorHeard")"""
+
+    def onColorHeard(self, *_args):
         """ This will be called each time a colour order (spoken) is
         detected.
 
         """
+
         #read recognized word from memory
         words = memory.getData("WordRecognized")
 
@@ -62,17 +73,26 @@ class ColourOrderModule(ALModule):
         memory.unsubscribeToEvent("WordRecognized",
             "ColourOrder")
 
+        #memory.unsubscribeToEvent("NAOqiReady","ColourOrder")
 
-        word  = words[0]
+        word = words[0]
         str = "You said %s"%word
         self.tts.say(str)
-        #TO DO: next step: vision module --> find colour/point to colour
+
+        #Call ColorDetection from vision module, so colour can be recgonized
+        #subscribes to BlopDetection event
+        #ColorDetection.subscribeToBlopEvent()
+
+        global ColorDetection
+        ColorDetection = ColorDetectionModule("ColorDetection")
 
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
-            "onColourDetected")
-
+            "onColorHeard")
+        #memory.subscribeToEvent("NAOqiReady",
+         #                       "ColourOrder",
+          #                      "onColourDetected")
 
 def main():
     """ Main entry point
@@ -109,6 +129,8 @@ def main():
     # variable
     global ColourOrder
     ColourOrder = ColourOrderModule("ColourOrder")
+
+
 
     try:
         while True:
