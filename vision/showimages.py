@@ -52,7 +52,7 @@ class ImageWidget(QWidget):
         """
         Register our video module to the robot.
         """
-        '''
+
         self._videoProxy = ALProxy("ALVideoDevice", IP, PORT)
         resolution = vision_definitions.kQVGA  # 320 * 240
         colorSpace = vision_definitions.kRGBColorSpace
@@ -61,7 +61,7 @@ class ImageWidget(QWidget):
         # Select camera.
         self._videoProxy.setParam(vision_definitions.kCameraSelectID,
                                   self._cameraID)
-        '''
+
         self._blobProxy = ALProxy("ALColorBlobDetection")
         #self._blobProxy.setColor(1,0,0, 150)
         #self._blobProxy.setObjectProperties(10, 5, "Circle")

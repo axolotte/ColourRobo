@@ -12,45 +12,39 @@ NAO_IP = "nao2.local"
 #NAO_IP = "localhost"
 
 
-# Global variable to store the colorBlob module instance
+# Global variable to store the HumanGreeter module instance
 colorBlob = None
 memory = None
 
 
-class ColorDetectionModule(ALModule):
+class ColorDetection(ALModule):
     """ A simple module able to react
     to colordetection events
 
     """
     def __init__(self, name):
+        #TODO nur einmal!!
         ALModule.__init__(self, name)
-<<<<<<< HEAD
-        
-=======
+        # No need for IP and port here because
+        # we have our Python broker connected to NAOqi broker
 
+        # Create a proxy to ALTextToSpeech for later use
+        self.tts = ALProxy("ALTextToSpeech")
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
         # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
-
-
-    def subscribeToBlopDetection(self,color):
-        """subscribe to blop event"""
         self._blobProxy = ALProxy("ALColorBlobDetection")
-        self._blobProxy.setColor(255, 0, 0, 50)
+        self._blobProxy.setColor(255,0,0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
-<<<<<<< HEAD
-=======
+        self.photoCaptureProxy = ALProxy("ALPhotoCapture")
+        self.photoCaptureProxy.setResolution(2)
+        self.photoCaptureProxy.setPictureFormat("jpg")
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
-                                "colorBlob",
-                                "onColorDetected")
-
-        print("subscribe to Blop")
-
+            "colorBlob",
+            "onColorDetected")
 
     def onColorDetected(self, *_args):
         """ This will be called each time a face is
@@ -61,10 +55,11 @@ class ColorDetectionModule(ALModule):
         # to avoid repetitions
         self._getCircle = self._blobProxy.getCircle()
         print self._getCircle
-
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
-
+        self.photoCaptureProxy.takePictures(3, "/home/nao/recordings/cameras/", "image")
+        #self.tts.say("I can see that color!")
+        print self.photoCaptureProxy.getCameraID()
         # Subscribe again to the event
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob",
@@ -105,7 +100,7 @@ def main():
     # The name given to the constructor must be the name of the
     # variable
     global colorBlob
-    colorBlob = ColorDetectionModule("colorBlob")
+    colorBlob = ColorDetection("colorBlob")
 
     try:
         while True:

@@ -11,6 +11,7 @@ from naoqi import ALBroker
 from naoqi import ALModule
 
 from optparse import OptionParser
+from vision.color_recognition import ColorDetectionModule
 
 NAO_IP = "nao2.local"
 
@@ -18,6 +19,7 @@ NAO_IP = "nao2.local"
 # Global variable to store the ColourOrder module instance
 ColourOrder = None
 memory = None
+ColorDetection = None
 
 
 class ColourOrderModule(ALModule):
@@ -33,23 +35,27 @@ class ColourOrderModule(ALModule):
         # Create a proxy to ALTextToSpeech for later use
         self.tts = ALProxy("ALTextToSpeech")
 
-        # Subscribe to the WordRecognized event:
         global memory
         memory = ALProxy("ALMemory")
+
         speech = ALProxy("ALSpeechRecognition")
+
+        #module for detecting color through vision
+        global ColorDetection
+        ColorDetection = ColorDetectionModule("ColorDetection")
+
         # List of colours which can be recognized
-
         speech.pause(True)
-
         speech.setVocabulary(["red", "blue", "black", "white"], False)
-
         speech.pause(False)
 
+        # Subscribe to the WordRecognized event:
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
-            "onColourDetected")
+           "onColorHeard")
 
-    def onColourDetected(self, *_args):
+
+    def onColorHeard(self, *_args):
         """ This will be called each time a colour order (spoken) is
         detected.
 
@@ -63,15 +69,19 @@ class ColourOrderModule(ALModule):
             "ColourOrder")
 
 
-        word  = words[0]
+        word = words[0]
         str = "You said %s"%word
         self.tts.say(str)
-        #TO DO: next step: vision module --> find colour/point to colour
+
+        #Call ColorDetection from vision module, so colour can be recgonized
+        #subscribes to BlopDetection event
+        ColorDetection.subscribeToBlopDetection(word)
+        time.sleep(100)
 
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
-            "onColourDetected")
+            "onColorHeard")
 
 
 def main():
@@ -104,11 +114,13 @@ def main():
        pport)       # parent broker port
 
 
-    # Warning: HumanGreeter must be a global variable
+    # Warning: ColourOrder must be a global variable
     # The name given to the constructor must be the name of the
     # variable
     global ColourOrder
     ColourOrder = ColourOrderModule("ColourOrder")
+
+
 
     try:
         while True:

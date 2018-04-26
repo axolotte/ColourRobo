@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b7d9248-b2b6-49c8-84a7-b5ff0f9840cc" name="Default" comment="Event listener audio. First try.">
-      <change afterPath="$PROJECT_DIR$/hello_world.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/listen/listen.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/listen/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vision/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/listen/listen.py" beforeDir="false" afterPath="$PROJECT_DIR$/listen/listen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_listen_loop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vision/color_recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/vision/color_recognition.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,7 +18,38 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="listen.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/listen/listen.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="14" column="14" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="color_recognition.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/vision/color_recognition.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="25" column="46" lean-forward="true" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main_listen_loop.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main_listen_loop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="86" column="63" selection-start-line="86" selection-start-column="63" selection-end-line="86" selection-end-column="63" />
+              <folding>
+                <element signature="e#76#86#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -57,15 +90,17 @@
         <option value="$PROJECT_DIR$/testing/HelloWorld.py" />
         <option value="$PROJECT_DIR$/audio/listening.py" />
         <option value="$PROJECT_DIR$/hello_world.py" />
+        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/listen/listen.py" />
+        <option value="$PROJECT_DIR$/main_listen_loop.py" />
+        <option value="$PROJECT_DIR$/vision/color_recognition.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="4">
     <option name="x" value="1" />
-    <option name="y" value="24" />
-    <option name="width" value="937" />
-    <option name="height" value="846" />
+    <option name="width" value="799" />
+    <option name="height" value="873" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -80,11 +115,6 @@
             <path>
               <item name="ColourRobo" type="b2602c69:ProjectViewProjectNode" />
               <item name="ColourRobo" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ColourRobo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ColourRobo" type="462c0819:PsiDirectoryNode" />
-              <item name="audio" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ColourRobo" type="b2602c69:ProjectViewProjectNode" />
@@ -118,7 +148,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.listen">
+  <component name="RunManager" selected="Python.main_listen_loop">
     <configuration name="HelloWorld" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="programming-humanoid-robot-in-python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -132,24 +162,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testing/HelloWorld.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="angle_interpolation" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="programming-humanoid-robot-in-python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/joint_control" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/joint_control/angle_interpolation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,6 +203,24 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="main_listen_loop" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="programming-humanoid-robot-in-python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_listen_loop.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="spark_agent" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="programming-humanoid-robot-in-python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -210,19 +240,19 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list>
-      <item itemvalue="Python.angle_interpolation" />
       <item itemvalue="Python.spark_agent" />
       <item itemvalue="Python.HelloWorld" />
       <item itemvalue="Python.hello_world" />
       <item itemvalue="Python.listen" />
+      <item itemvalue="Python.main_listen_loop" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main_listen_loop" />
         <item itemvalue="Python.listen" />
         <item itemvalue="Python.hello_world" />
         <item itemvalue="Python.HelloWorld" />
         <item itemvalue="Python.spark_agent" />
-        <item itemvalue="Python.angle_interpolation" />
       </list>
     </recent_temporary>
   </component>
@@ -251,7 +281,14 @@
       <option name="project" value="LOCAL" />
       <updated>1523434926461</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Listener added.">
+      <created>1523519481168</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1523519481168</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -266,40 +303,30 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="23" width="1603" height="878" extended-state="6" />
+    <frame x="1" y="0" width="799" height="873" extended-state="4" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12507817" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29056603" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32988358" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3051948" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.33072916" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.30769232" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3190184" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="SFDX" order="7" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30769232" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.0" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="right" id="Data View" order="3" />
       <window_info anchor="bottom" id="Log Manager" order="7" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3190184" />
       <window_info anchor="bottom" id="Execute Anonymous" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Salesforce" order="7" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.03374233" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
     </layout>
     <layout-to-restore>
       <window_info anchor="bottom" id="SFDX" order="7" />
@@ -307,13 +334,12 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3004566" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2974026" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Data View" order="3" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Log Manager" order="13" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.03374233" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3190184" />
@@ -321,9 +347,10 @@
       <window_info anchor="bottom" id="Terminal" order="12" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -332,23 +359,24 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Branch" />
     <MESSAGE value="Event listener audio. First try." />
-    <option name="LAST_COMMIT_MESSAGE" value="Event listener audio. First try." />
+    <MESSAGE value="Listener added." />
+    <option name="LAST_COMMIT_MESSAGE" value="Listener added." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file:///media/superman/Volume/Charlotte/git/ColourRobo/kinematics/inverse_kinematics.py</url>
+          <url>file://$PROJECT_DIR$/kinematics/inverse_kinematics.py</url>
           <line>113</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file:///media/superman/Volume/Charlotte/git/ColourRobo/kinematics/inverse_kinematics.py</url>
+          <url>file://$PROJECT_DIR$/kinematics/inverse_kinematics.py</url>
           <line>99</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file:///media/superman/Volume/Charlotte/git/ColourRobo/distributed_computing/agent_server.py</url>
+          <url>file://$PROJECT_DIR$/distributed_computing/agent_server.py</url>
           <line>22</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
@@ -366,12 +394,20 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/joint_control/angle_interpolation.py" />
-    <entry file="file://$PROJECT_DIR$/software_installation/sexpr.py" />
-    <entry file="file://$PROJECT_DIR$/software_installation/spark_agent.py" />
-    <entry file="file://$PROJECT_DIR$/joint_control/pid.py" />
-    <entry file="file://$PROJECT_DIR$/audio/listening.py" />
-    <entry file="file://$PROJECT_DIR$/joint_control/angle_interpolation.py" />
+    <entry file="file://$PROJECT_DIR$/../RoboCup/programming-humanoid-robot-in-python/hands_on_nao/pynaoqi/pynaoqi-python2.7-2.1.2.17-linux64/naoqi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5994">
+          <caret line="339" selection-start-line="339" selection-end-line="339" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_listen_loop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="936">
+          <caret line="61" column="11" lean-forward="true" selection-start-line="61" selection-start-column="11" selection-end-line="61" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/software_installation/sexpr.py" />
     <entry file="file://$PROJECT_DIR$/software_installation/spark_agent.py" />
     <entry file="file://$PROJECT_DIR$/joint_control/pid.py" />
@@ -415,17 +451,48 @@
     <entry file="file://$PROJECT_DIR$/software_installation/spark_agent.py" />
     <entry file="file://$PROJECT_DIR$/joint_control/pid.py" />
     <entry file="file://$PROJECT_DIR$/audio/listening.py" />
-    <entry file="file://$PROJECT_DIR$/listen/listen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="44" column="14" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hello_world.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
-          <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RoboCup/programming-humanoid-robot-in-python/hands_on_nao/pynaoqi/pynaoqi-python2.7-2.1.2.17-linux64/inaoqi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5724">
+          <caret line="318" selection-start-line="318" selection-end-line="318" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RoboCup/programming-humanoid-robot-in-python/hands_on_nao/pynaoqi/pynaoqi-python2.7-2.1.2.17-linux64/naoqi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5994">
+          <caret line="339" selection-start-line="339" selection-end-line="339" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/listen/listen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="14" column="14" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_listen_loop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="86" column="63" selection-start-line="86" selection-start-column="63" selection-end-line="86" selection-end-column="63" />
+          <folding>
+            <element signature="e#76#86#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vision/color_recognition.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="25" column="46" lean-forward="true" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
         </state>
       </provider>
     </entry>

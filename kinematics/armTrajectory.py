@@ -1,32 +1,50 @@
 # -*- encoding: UTF-8 -*-
 
-''' PoseInit: Small example to make Nao go to an initial position. '''
+'''Cartesian control: With this Nao can point on given coordinates'''
 
 from optparse import OptionParser
 from naoqi import ALProxy
 from naoqi import ALBroker
 from naoqi import ALModule
+import motion
+import almath
 import time
-import sys
 from math import pi
+import sys
+#TODO Linker Arm nicht zurückfahren, nicht gegen bein schlagen (v regulieren), Hand drehen, Koordinaten berechen,
 NAO_IP = "nao2.local"
-#NAO_IP = "localhost"
+#AO_IP = "localhost"
 
-class Pose():
+class Moovement():
     def __init__(self):
-        #ALModule.__init__(self, name)
+        ''' Example showing a path of two positions
+        Warning: Needs a PoseInit before executing
+        '''
+        self.colorAngle = 0
         self.motionProxy  = ALProxy("ALMotion")
         self.postureProxy = ALProxy("ALRobotPosture")
 
-        # Wake up robot
+        # Wake up robot--------------------------------------------------------
         self.motionProxy.wakeUp()
 
-        # Send robot to Stand
-        self.postureProxy.goToPosture("Stand", 0.5)
-        print('Nao stands')
+        # Send robot to Stand Init---------------------------------------------
+        self.postureProxy.goToPosture("StandZero", 0.5)
 
-        # Go to rest position
-        self.motionProxy.rest()
+
+        # Point with right arm at given color-blob ----------------------------
+        self.colorAngle = 20 #<30
+        maxSpeedFraction = 0.2 # Using 20% of maximum joint speed
+        #if self.colorAngle < 90:
+        names  = "LArm"
+        targetAngles     = [pi/2,0,0,0,0,0]
+        self.motionProxy.angleInterpolationWithSpeed(names, targetAngles, maxSpeedFraction)
+
+        names  = "RArm"
+        targetAngles     = [0,self.colorAngle*almath.TO_RAD, -pi/2,0,0,0]
+        #else:
+        #targetAngles     = [0, 0,0,0,0,0]
+        self.motionProxy.angleInterpolationWithSpeed(names, targetAngles, maxSpeedFraction)
+
 
 if __name__ == "__main__":
     parser = OptionParser()
@@ -57,8 +75,8 @@ if __name__ == "__main__":
     # Warning: pose must be a global variable
     # The name given to the constructor must be the name of the
     # variable
-    global pose
-    pose = Pose()
+    global traverse
+    traverse = Moovement()
 
     try:
         while True:

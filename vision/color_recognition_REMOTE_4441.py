@@ -24,12 +24,8 @@ class ColorDetectionModule(ALModule):
     """
     def __init__(self, name):
         ALModule.__init__(self, name)
-<<<<<<< HEAD
-        
-=======
 
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
         # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
@@ -40,10 +36,7 @@ class ColorDetectionModule(ALModule):
         self._blobProxy = ALProxy("ALColorBlobDetection")
         self._blobProxy.setColor(255, 0, 0, 50)
         self._blobProxy.setObjectProperties(10, 5, "Circle")
-<<<<<<< HEAD
-=======
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
                                 "colorBlob",
