@@ -14,7 +14,7 @@ NAO_IP = "nao2.local"
 
 # Global variable to store the colorBlob module instance
 colorBlob = None
-memory = None
+#memory = None
 
 
 class ColorDetectionModule(ALModule):
@@ -24,26 +24,21 @@ class ColorDetectionModule(ALModule):
     """
     def __init__(self, name):
         ALModule.__init__(self, name)
-<<<<<<< HEAD
-        
-=======
 
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
         # Subscribe to the ColorRecognition event:
         global memory
         memory = ALProxy("ALMemory")
+        self.subscribeToBlopDetection("red")
 
 
     def subscribeToBlopDetection(self,color):
         """subscribe to blop event"""
-        self._blobProxy = ALProxy("ALColorBlobDetection")
-        self._blobProxy.setColor(255, 0, 0, 50)
-        self._blobProxy.setObjectProperties(10, 5, "Circle")
-<<<<<<< HEAD
-=======
+        self.blobProxy = ALProxy("ALColorBlobDetection")
+        #TO DO: choose color
+        self.blobProxy.setColor(255, 0, 0, 50)
+        self.blobProxy.setObjectProperties(10, 5, "Circle")
 
->>>>>>> cb339490fd3fa447a2643c7a1568196e81cf8554
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
                                 "colorBlob",
@@ -53,17 +48,21 @@ class ColorDetectionModule(ALModule):
 
 
     def onColorDetected(self, *_args):
-        """ This will be called each time a face is
+        """ This will be called each time a color is
         detected.
 
         """
         # Unsubscribe to the event when talking,
         # to avoid repetitions
-        self._getCircle = self._blobProxy.getCircle()
-        print self._getCircle
+        getCircle = self.blobProxy.getCircle()
+        print "colorseen"
+        print getCircle
 
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
+
+        #Do stuff here
+        time.sleep(3)
 
         # Subscribe again to the event
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",

@@ -20,6 +20,7 @@ NAO_IP = "nao2.local"
 ColourOrder = None
 memory = None
 ColorDetection = None
+colorBlob = None
 
 
 class ColourOrderModule(ALModule):
@@ -33,7 +34,9 @@ class ColourOrderModule(ALModule):
         # we have our Python broker connected to NAOqi broker
 
         # Create a proxy to ALTextToSpeech for later use
+        # TO DO: give port and IP to proxy??
         self.tts = ALProxy("ALTextToSpeech")
+        self.blobProxy = ALProxy("ALColorBlobDetection")
 
         global memory
         memory = ALProxy("ALMemory")
@@ -41,8 +44,8 @@ class ColourOrderModule(ALModule):
         speech = ALProxy("ALSpeechRecognition")
 
         #module for detecting color through vision
-        global ColorDetection
-        ColorDetection = ColorDetectionModule("ColorDetection")
+        #global ColorDetection
+        #ColorDetection = ColorDetectionModule("ColorDetection")
 
         # List of colours which can be recognized
         speech.pause(True)
@@ -68,20 +71,57 @@ class ColourOrderModule(ALModule):
         memory.unsubscribeToEvent("WordRecognized",
             "ColourOrder")
 
-
-        word = words[0]
-        str = "You said %s"%word
+        color = words[0]
+        str = "You said %s"%color
         self.tts.say(str)
 
         #Call ColorDetection from vision module, so colour can be recgonized
         #subscribes to BlopDetection event
-        ColorDetection.subscribeToBlopDetection(word)
-        time.sleep(100)
+        self.subscribeToBlopDetection(color)
+        #time.sleep(30)
+        # TO DO: choose color
+
 
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
             "onColorHeard")
+
+    def subscribeToBlopDetection(self, color):
+        """subscribe to blop event"""
+
+        #TO DO: choose color
+        self.blobProxy.setColor(255, 0, 0, 50)
+        self.blobProxy.setObjectProperties(10, 5, "Circle")
+
+
+        memory.subscribeToEvent("ALTracker/ColorBlobDetected",
+                                "ColourOrder",
+                                "onColorDetected")
+
+        print("subscribe to Blop")
+
+    def onColorDetected(self, *_args):
+        """ This will be called each time a color is
+        detected.
+
+        """
+        # Unsubscribe to the event when talking,
+        # to avoid repetitions
+        circle_coordinates = self.blobProxy.getCircle()
+        print "colorseen"
+        print circle_coordinates
+
+        memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
+                                  "ColourOrder")
+
+        #TODO: Do stuff here with arms (Jakob)
+        time.sleep(3)
+
+        # Subscribe again to the event
+        memory.subscribeToEvent("ALTracker/ColorBlobDetected",
+                                "ColourOrder",
+                                "onColorDetected")
 
 
 def main():
