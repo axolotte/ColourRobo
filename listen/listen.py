@@ -67,8 +67,7 @@ class ColourOrderModule(ALModule):
         str = "You said %s"%word
         self.tts.say(str)
         #TO DO: next step: vision module --> find colour/point to colour
-
-        # Subscribe again to the event
+    
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
             "onColourDetected")

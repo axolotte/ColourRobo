@@ -23,28 +23,28 @@ class Moovement():
         self.colorAngle = 0
         self.motionProxy  = ALProxy("ALMotion")
         self.postureProxy = ALProxy("ALRobotPosture")
+        self.moovementProxy = ALProxy("ALAutonomousMoves") #hoer auf rumzuzappeln
+
+        self.moovementProxy.setExpressiveListeningEnabled(False)
 
         # Wake up robot--------------------------------------------------------
         self.motionProxy.wakeUp()
 
         # Send robot to Stand Init---------------------------------------------
-        self.postureProxy.goToPosture("StandZero", 0.5)
+        self.postureProxy.goToPosture("StandInit", 0.5)
 
 
         # Point with right arm at given color-blob ----------------------------
-        self.colorAngle = 20 #<30
+        self.colorAngle = 0 #<30
         maxSpeedFraction = 0.2 # Using 20% of maximum joint speed
         #if self.colorAngle < 90:
-        names  = "LArm"
-        targetAngles     = [pi/2,0,0,0,0,0]
-        self.motionProxy.angleInterpolationWithSpeed(names, targetAngles, maxSpeedFraction)
-
         names  = "RArm"
-        targetAngles     = [0,self.colorAngle*almath.TO_RAD, -pi/2,0,0,0]
+        targetAngles     = [0, self.colorAngle*almath.TO_RAD, -pi/2,0,0,0]
         #else:
         #targetAngles     = [0, 0,0,0,0,0]
         self.motionProxy.angleInterpolationWithSpeed(names, targetAngles, maxSpeedFraction)
-
+        time.sleep(3)
+        self.motionProxy.rest()
 
 if __name__ == "__main__":
     parser = OptionParser()

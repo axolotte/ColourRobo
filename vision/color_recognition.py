@@ -35,6 +35,7 @@ class ColorDetectionModule(ALModule):
     def subscribeToBlopDetection(self,color):
         """subscribe to blop event"""
         self.blobProxy = ALProxy("ALColorBlobDetection")
+        self.trackProxy = ALProxy("ALTracker")
         #TO DO: choose color
         self.blobProxy.setColor(255, 0, 0, 50)
         self.blobProxy.setObjectProperties(10, 5, "Circle")
@@ -58,6 +59,21 @@ class ColorDetectionModule(ALModule):
         print "colorseen"
         print getCircle
 
+        data = memory.getData("ALTracker/ColorBlobDetected")
+        print "Position6D of target to track in FRAME_TORSO: %s"%data[0]
+        '''
+
+              TargetPositionInFrameTorso,
+                [289.9533996582031,
+                -29.3204345703125,
+                23.041688919067383,
+                -0.009687285870313644,
+                -0.07828182727098465,
+                -0.1008019670844078]
+
+
+
+        '''
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
             "colorBlob")
 
