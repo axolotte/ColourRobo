@@ -166,6 +166,8 @@ class ColourOrderModule(ALModule):
         # set fixet roboter values
         camera_horizontal_angle = 60.97*almath.TO_RAD #=alhpa
         dy_shoulder = 98#mm #98mm wenn genau mitte bei keiner kopfdrehung
+        if dy_shoulder < 32:
+            print "WARNING! blob is too close for pointing!"
 
         print"y value of blob in percent from left pic side is %s"%x_value_pic
 
@@ -173,7 +175,7 @@ class ColourOrderModule(ALModule):
         distance = 960#mm x-distance between camera and blob = b
         print"distance of blob is %s"%distance
 
-        horizon_length = 2*distance*sin(camera_horizontal_angle)/sin(90-camera_horizontal_angle) #=a, betha=180-90-60.97
+        horizon_length = 2*distance*sin(camera_horizontal_angle/2)/sin(90-camera_horizontal_angle/2) #=a, betha=180-90-60.97/2
         #horizon_length = 600
 
         print"Horizon length is %s"%horizon_length
@@ -186,30 +188,25 @@ class ColourOrderModule(ALModule):
 
         if x_value_pic > 0.5:#user right arm
             target = "RArm"
-            wrist_angle = -pi/2
+            ellbow_roll = -pi/2
 
             distance_to_shoulder = dy_shoulder-distance_to_center #TODO checken was passiert wenn negativ? (weiter rechts als re. schulter)
-            if distance_to_center > 0:
-                print("blob is between center and right shoulder!")
+            #if distance_to_center > 0:
+            #    print("blob is between center and right shoulder!")
 
             angle_for_pointing = atan2(distance_to_shoulder, distance)
-
-            if distance_to_center < 0:
-                angle_for_pointing = -angle_for_pointing
             handName = "RHand"
 
         else:
-            distance_to_shoulder = dy_shoulder-distance_to_center
+            distance_to_shoulder = distance_to_center-dy_shoulder
             target = "LArm"
-            wrist_angle = pi/2
-            angle_for_pointing = -atan2(distance_to_shoulder, distance)
-            if distance_to_center < 0:
-                angle_for_pointing = -angle_for_pointing
+            ellbow_roll = pi/2
+            angle_for_pointing = atan2(distance_to_shoulder, distance)
             handName = "LHand"
 
         print"y distance of blob to robots right shoulder is %s"%distance_to_shoulder
 
-        targetAngles  = [0, angle_for_pointing,wrist_angle,0,0,0]
+        targetAngles  = [0, angle_for_pointing,ellbow_roll,0,0,90]
 
         print "angle = %s"%(angle_for_pointing*almath.TO_DEG)
 
@@ -263,7 +260,6 @@ def main():
     ColourOrder = ColourOrderModule("ColourOrder")
 
 
-
     try:
         while True:
             time.sleep(1)
@@ -273,7 +269,8 @@ def main():
         ColourOrder.exit_program()
         myBroker.shutdown()
         sys.exit(0)
-
+    #TODO
+    #Fotos machen
 
 
 if __name__ == "__main__":
