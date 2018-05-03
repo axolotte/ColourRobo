@@ -5,16 +5,19 @@
 
 import sys
 import time
-
+import almath
 from naoqi import ALProxy
 from naoqi import ALBroker
 from naoqi import ALModule
-
+from math import pi, sin, atan2
+from vision.vision_showimages import ImageWidget
+from PyQt4.QtGui import QApplication
 from optparse import OptionParser
 from vision.color_recognition import ColorDetectionModule
 
 NAO_IP = "nao2.local"
-
+PORT = 9559
+CameraID = 1
 
 # Global variable to store the ColourOrder module instance
 ColourOrder = None
@@ -37,6 +40,11 @@ class ColourOrderModule(ALModule):
         # TO DO: give port and IP to proxy??
         self.tts = ALProxy("ALTextToSpeech")
         self.blobProxy = ALProxy("ALColorBlobDetection")
+        self.motionProxy  = ALProxy("ALMotion")
+        self.postureProxy = ALProxy("ALRobotPosture")
+        self.postureProxy.goToPosture("Stand", 0.5)
+        self.moovementProxy = ALProxy("ALAutonomousMoves")
+        self.moovementProxy.setExpressiveListeningEnabled(False) #hoer auf rumzuzappeln
 
         global memory
         memory = ALProxy("ALMemory")
@@ -56,6 +64,12 @@ class ColourOrderModule(ALModule):
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
            "onColorHeard")
+        #for video stream
+        '''
+        app = QApplication(sys.argv)
+        myWidget = ImageWidget(NAO_IP, PORT, CameraID)
+        myWidget.show()
+        '''
 
 
     def onColorHeard(self, *_args):
@@ -72,23 +86,23 @@ class ColourOrderModule(ALModule):
             "ColourOrder")
 
         color = words[0]
-        str = "You said %s"%color
-        self.tts.say(str)
-
+        str = "I'll look for a %s blob!"%color
+        #self.tts.say(str)
+        print str
         #time.sleep(30)
-        if color = "red":
+        if color == "red":
             red = 255
             green = 0
             blue = 0
-        else if color = "blue":
-            red = 0
-            green = 0
+        elif color == "blue":
+            red = 100
+            green = 50
             blue = 255
-        else if color = "green":
+        elif color == "green":
             red = 0
             green = 255
             blue = 0
-        else if color = "black":
+        elif color == "black":
             red = 255
             green = 255
             blue = 255
@@ -97,8 +111,9 @@ class ColourOrderModule(ALModule):
 
         #Call ColorDetection from vision module, so colour can be recgonized
         #subscribes to BlopDetection event
-        self.subscribeToBlopDetection(red, green, blue)
 
+        self.subscribeToBlopDetection(red, green, blue)
+        time.sleep(2)
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized",
             "ColourOrder",
@@ -107,13 +122,14 @@ class ColourOrderModule(ALModule):
     def subscribeToBlopDetection(self, red, green, blue):
         """subscribe to blop event"""
 
-        self.blobProxy.setColor(red, gree, blue, 50)
+        self.blobProxy.setColor(red, green, blue, 50)
         self.blobProxy.setObjectProperties(10, 5, "Circle")
 
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
                                 "ColourOrder",
                                 "onColorDetected")
+
 
         print("subscribe to Blop")
 
@@ -124,71 +140,91 @@ class ColourOrderModule(ALModule):
         """
         # Unsubscribe to the event when talking,
         # to avoid repetitions
-        circle_coordinates = self.blobProxy.getCircle()
-        print "colorseen"
-        print circle_coordinates
 
         memory.unsubscribeToEvent("ALTracker/ColorBlobDetected",
                                   "ColourOrder")
 
-        point_at_circle(circle_coordinates[0])
+        circle_coordinates = self.blobProxy.getCircle()
 
+        str = "I can see one over there!"
+        self.tts.say(str)
+        print str
+        self.point_at_circle(circle_coordinates[0])
+        time.sleep(2)
         # Subscribe again to the event
-        #memory.subscribeToEvent("ALTracker/ColorBlobDetected",
-        #                        "ColourOrder",
-        #                        "onColorDetected")
+        memory.subscribeToEvent("ALTracker/ColorBlobDetected",
+                                "ColourOrder",
+                                "onColorDetected")
 
-        def point_at_circle(self, x_value_pic):
-            motionProxy  = ALProxy("ALMotion")
-            moovementProxy = ALProxy("ALAutonomousMoves")
-            moovementProxy.setExpressiveListeningEnabled(False) #hoer auf rumzuzappeln
+    def point_at_circle(self, x_value_pic):
 
-            # Wake up robot-----------------------------------------------------
-            motionProxy.wakeUp()
 
-            # Calculate angle of arm in order to point at blob------------------
-            # set fixet roboter values
-            camera_horizontal_angle = 60.97*almath.TO_RAD #=alhpa
-            dy_shoulder = 98#mm #98mm wenn genau mitte bei keiner kopfdrehung
+        # Wake up robot-----------------------------------------------------
+        self.motionProxy.wakeUp()
 
-            print"y value of blob in percent from left pic side is %s"%x_value_pic
+        # Calculate angle of arm in order to point at blob------------------
+        # set fixet roboter values
+        camera_horizontal_angle = 60.97*almath.TO_RAD #=alhpa
+        dy_shoulder = 98#mm #98mm wenn genau mitte bei keiner kopfdrehung
 
-            # use sin(alpha)/a = sin(beta)/b to get horizon_length
-            distance = 240#mm x-distance between camera and blob = b
-            print"distance of blob is %s"%distance
+        print"y value of blob in percent from left pic side is %s"%x_value_pic
 
-            horizon_length = 2*distance*sin(camera_horizontal_angle)/sin(90-camera_horizontal_angle) #=a, betha=180-90-60.97
-            print"horizon length of is %s"%horizon_length
+        # use sin(alpha)/a = sin(beta)/b to get horizon_length
+        distance = 960#mm x-distance between camera and blob = b
+        print"distance of blob is %s"%distance
 
-            x_length = x_value_pic * horizon_length
-            print"y length of blob in percent from left pic side is %s"%x_length
+        horizon_length = 2*distance*sin(camera_horizontal_angle)/sin(90-camera_horizontal_angle) #=a, betha=180-90-60.97
+        #horizon_length = 600
 
-            distance_to_center = abs(x_length - (horizon_length/2))
-            print"y distance of blob to robot center is %s"%distance_to_center
+        print"Horizon length is %s"%horizon_length
 
-            if x_value_pic > 0.5:
-                distance_to_shoulder = dy_shoulder-distance_to_center #TODO checken was passiert wenn negativ? (weiter rechts als re. schulter)
-                target = "RArm"
-                wrist_angle = -pi/2
-                angle_for_pointing = atan2(distance, distance_to_shoulder)
-                handName = "RHand"
+        x_length = x_value_pic * horizon_length
+        print"y length of blob in percent from left pic side is %s"%x_length
 
-            else:
-                distance_to_shoulder = dy_shoulder-distance_to_center
-                target = "LArm"
-                wrist_angle = pi/2
-                angle_for_pointing = -atan2(distance, distance_to_shoulder)
-                handName = "LHand"
+        distance_to_center = abs(x_length - (horizon_length/2))
+        print"y distance of blob to robot center is %s"%distance_to_center
 
-            print"y distance of blob to robots right shoulder is %s"%distance_to_shoulder
+        if x_value_pic > 0.5:#user right arm
+            target = "RArm"
+            wrist_angle = -pi/2
 
-            targetAngles  = [0, angle_for_pointing,wrist_angle,0,0,0]
-            print "angle = %s"%(angle_for_pointing*almath.TO_DEG)
+            distance_to_shoulder = dy_shoulder-distance_to_center #TODO checken was passiert wenn negativ? (weiter rechts als re. schulter)
+            if distance_to_center > 0:
+                print("blob is between center and right shoulder!")
 
-            #moove arm --------------------------------------------------------
-            maxSpeedFraction = 0.2
-            motionProxy.angleInterpolationWithSpeed(target, targetAngles, maxSpeedFraction)
-            motionProxy.openHand(handName);
+            angle_for_pointing = atan2(distance_to_shoulder, distance)
+
+            if distance_to_center < 0:
+                angle_for_pointing = -angle_for_pointing
+            handName = "RHand"
+
+        else:
+            distance_to_shoulder = dy_shoulder-distance_to_center
+            target = "LArm"
+            wrist_angle = pi/2
+            angle_for_pointing = -atan2(distance_to_shoulder, distance)
+            if distance_to_center < 0:
+                angle_for_pointing = -angle_for_pointing
+            handName = "LHand"
+
+        print"y distance of blob to robots right shoulder is %s"%distance_to_shoulder
+
+        targetAngles  = [0, angle_for_pointing,wrist_angle,0,0,0]
+
+        print "angle = %s"%(angle_for_pointing*almath.TO_DEG)
+
+        #moove arm --------------------------------------------------------
+        maxSpeedFraction = 0.2
+        self.motionProxy.angleInterpolationWithSpeed(target, targetAngles, maxSpeedFraction)
+        #self.motionProxy.openHand(handName);
+
+        time.sleep(5)
+
+        targetAngles = [pi/2,0,0,0,0,0]
+        self.motionProxy.angleInterpolationWithSpeed(target, targetAngles, maxSpeedFraction)
+
+    def exit_program(self):
+        self.motionProxy.rest()
 
 def main():
     """ Main entry point
@@ -234,6 +270,7 @@ def main():
     except KeyboardInterrupt:
         print
         print "Interrupted by user, shutting down"
+        ColourOrder.exit_program()
         myBroker.shutdown()
         sys.exit(0)
 

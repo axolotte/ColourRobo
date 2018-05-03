@@ -9,7 +9,7 @@ from naoqi import ALModule
 import motion
 import almath
 import time
-from math import pi
+from math import pi, sin
 import sys
 #TODO Linker Arm nicht zurückfahren, nicht gegen bein schlagen (v regulieren), Hand drehen, Koordinaten berechen,
 NAO_IP = "nao2.local"
