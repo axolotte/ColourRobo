@@ -114,10 +114,6 @@ class ColourOrderModule(ALModule):
 
         self.subscribeToBlopDetection(red, green, blue)
         time.sleep(2)
-        # Subscribe again to the event
-        memory.subscribeToEvent("WordRecognized",
-            "ColourOrder",
-            "onColorHeard")
 
     def subscribeToBlopDetection(self, red, green, blue):
         """subscribe to blop event"""
@@ -145,16 +141,24 @@ class ColourOrderModule(ALModule):
                                   "ColourOrder")
 
         circle_coordinates = self.blobProxy.getCircle()
+        if not circle_coordinates:
+            print "Circle to small"
+            # Subscribe again to the event
+            memory.subscribeToEvent("ALTracker/ColorBlobDetected",
+                                      "ColourOrder", "onColorDetected")
+        else:
+            print "circle_coordinates = %s"%circle_coordinates
+            str = "I can see one over there!"
+            #self.tts.say(str)
+            print str
+            self.point_at_circle(circle_coordinates[0])
+            time.sleep(2)
 
-        str = "I can see one over there!"
-        self.tts.say(str)
-        print str
-        self.point_at_circle(circle_coordinates[0])
-        time.sleep(2)
-        # Subscribe again to the event
-        memory.subscribeToEvent("ALTracker/ColorBlobDetected",
-                                "ColourOrder",
-                                "onColorDetected")
+            # Subscribe again to the event
+            memory.subscribeToEvent("WordRecognized",
+                "ColourOrder",
+                "onColorHeard")
+
 
     def point_at_circle(self, x_value_pic):
 
@@ -172,7 +176,7 @@ class ColourOrderModule(ALModule):
         print"y value of blob in percent from left pic side is %s"%x_value_pic
 
         # use sin(alpha)/a = sin(beta)/b to get horizon_length
-        distance = 960#mm x-distance between camera and blob = b
+        distance = 1365#mm x-distance between camera and blob = b
         print"distance of blob is %s"%distance
 
         horizon_length = 2*distance*sin(camera_horizontal_angle/2)/sin(90-camera_horizontal_angle/2) #=a, betha=180-90-60.97/2
@@ -191,15 +195,12 @@ class ColourOrderModule(ALModule):
             ellbow_roll = -pi/2
 
             distance_to_shoulder = dy_shoulder-distance_to_center #TODO checken was passiert wenn negativ? (weiter rechts als re. schulter)
-            #if distance_to_center > 0:
-            #    print("blob is between center and right shoulder!")
-
             angle_for_pointing = atan2(distance_to_shoulder, distance)
             handName = "RHand"
 
         else:
-            distance_to_shoulder = distance_to_center-dy_shoulder
             target = "LArm"
+            distance_to_shoulder = distance_to_center-dy_shoulder
             ellbow_roll = pi/2
             angle_for_pointing = atan2(distance_to_shoulder, distance)
             handName = "LHand"
@@ -213,7 +214,7 @@ class ColourOrderModule(ALModule):
         #moove arm --------------------------------------------------------
         maxSpeedFraction = 0.2
         self.motionProxy.angleInterpolationWithSpeed(target, targetAngles, maxSpeedFraction)
-        #self.motionProxy.openHand(handName);
+        self.motionProxy.openHand(handName);
 
         time.sleep(5)
 
@@ -259,7 +260,6 @@ def main():
     global ColourOrder
     ColourOrder = ColourOrderModule("ColourOrder")
 
-
     try:
         while True:
             time.sleep(1)
@@ -271,6 +271,14 @@ def main():
         sys.exit(0)
     #TODO
     #Fotos machen
+    '''
+    [E] 6107 qitype.dynamicobject: 	ALPythonModule::execute
+	calling ColourOrder.onColorDetected
+    <type 'exceptions.TypeError'>
+    'NoneType' object has no attribute '__getitem__'
+
+    '''
+
 
 
 if __name__ == "__main__":
