@@ -23,7 +23,7 @@
 
 
 \section{Introduction}
-The Nao robot is a humanoid robot produced by Aldebaran. It is 574 mm high and has xx joints, controlled by stepper motors.
+The Nao robot is a humanoid robot produced by Aldebaran. It is 574 mm high and has xx joints, controlled by stepper motors.+
 
 In this project to goal was to enable the robot to listen to a color, interpret the color heard as RGB values and then point to this color.
 
@@ -34,9 +34,22 @@ In this project to goal was to enable the robot to listen to a color, interpret 
 As predetermined by the course the Python Software Development Kit (SDK) was used.
 This SDK provides the use of C++ modules and enables the user to create own Python modules.\cite{API}
 
+
 \subsection{Speech Detection}
+
+The first part of the project aims at implementing a speech recognition and distinguish the different colors.
+Therefore the module "ALSpeechRecognition" was used. It provides the event listener "WordRecognized". 
+When subscribed to this module, an event is thrown when a word is recognized from the vocabulary list which is specified beforehand.
+Once the event is detected and thrown, the program jumps to the method "OnColorHeard", there a simple if-query determines the color. 
+Afterwards the next method is called which is described in the following section.
 \subsection{Color Detection and Movement}
 \section{Conclusion}
+\paragraph{Goals reached}
+The robot is able to listen to a color, detect this color and point towards it.
+\paragraph{Limitations}
+So far only the colors which are specified in the code can be detected by the robot. This limits the interaction possiblities. A more interactive approach would be that any color could be said or that the words can be specified by the person interacting with the robot, e.g. via speech input.
+But permitting the robot to detect more colors is difficult, as colors appear quite different in changing light conditions. Distinguishing black, red, blue and green is easier as the RGB values are very different.
+
 
 \printbibliography
 

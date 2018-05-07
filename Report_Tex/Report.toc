@@ -8,6 +8,10 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1}Speech Detection}{1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Color Detection and Movement}{1}
+\contentsline {subsection}{\numberline {2.2}Color Detection and Movement}{2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Conclusion}{1}
+\contentsline {section}{\numberline {3}Conclusion}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Goals reached}{2}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Limitations}{2}
