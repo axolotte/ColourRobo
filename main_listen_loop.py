@@ -122,7 +122,7 @@ class ColourOrderModule(ALModule):
         self.blobProxy.setObjectProperties(10, 5, "Circle")
 
 
-        memory.subscribeToEvent("ALTracker/ColorBlobDetected",
+        memory.subscribeToEvent("ALTracker/ColorBlobDetected",sd
                                 "ColourOrder",
                                 "onColorDetected")
 
