@@ -7,7 +7,7 @@
 \textclass article
 \begin_preamble
 
-
+\usepackage{textgreek}
 \usepackage[english]{babel}
 \usepackage[style=numeric, backend=biber]{biblatex}
 \usepackage{csquotes}
@@ -83,6 +83,10 @@
 \begin_body
 
 \begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset ERT
 status collapsed
 
@@ -110,7 +114,7 @@ Introduction
 
 \begin_layout Standard
 The Nao robot is a humanoid robot produced by Aldebaran.
- It is 574 mm high and has xx joints, controlled by stepper motors.+
+ It is 574 mm high and has 26 joints, controlled by stepper motors.
 \end_layout
 
 \begin_layout Standard
@@ -144,12 +148,36 @@ Speech Detection
 \begin_layout Standard
 The first part of the project aims at implementing a speech recognition
  and distinguish the different colors.
- Therefore the module "ALSpeechRecognition" was used.
- It provides the event listener "WordRecognized".
+ Therefore the module 
+\begin_inset Quotes eld
+\end_inset
+
+ALSpeechRecognition
+\begin_inset Quotes erd
+\end_inset
+
+ was used.
+ It provides the event listener 
+\begin_inset Quotes eld
+\end_inset
+
+WordRecognized
+\begin_inset Quotes erd
+\end_inset
+
+.
  When subscribed to this module, an event is thrown when a word is recognized
  from the vocabulary list which is specified beforehand.
  Once the event is detected and thrown, the program jumps to the method
- "OnColorHeard", there a simple if-query determines the color.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+OnColorHeard
+\begin_inset Quotes erd
+\end_inset
+
+, there a simple if-query determines the color.
  Afterwards the next method is called with tho colors Red-Green-Blue values
  which is described in the following section.
  
@@ -231,11 +259,11 @@ As described in the previuos section at this point we have an x-value which
 
 \begin_layout Standard
 Since we have the normalized x-value counted from the left side of the picture
- we have to calculate the distance from the robots center by multiplying
- it with the horizon-lenght which in by our definition is the size an object
- could maximal have, in the set distance, so that the robot could still
- see all of it.
- For that we need annother parameter, by name, the opening angle of our
+ we have to calculate the horizontal distance from the robots center by
+ multiplying it with the horizon-lenght which in by our definition is the
+ size an object could maximal have, in the set distance, so that the robot
+ could still see all of it.
+ For that we need annother parameter, by name, the opening angle α of our
  camera, defined in the documentation 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -244,7 +272,12 @@ key "DOC"
 \end_inset
 
 .
- 
+ With the law of sine and the distance d of our robot we can determine now
+ the half horizen length by 
+\begin_inset Formula $\frac{horizon}{2}=d*\frac{sin(\frac{\alpha}{2})}{sin(90-\frac{α}{2})}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
