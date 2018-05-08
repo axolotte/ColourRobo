@@ -37,7 +37,6 @@ class ColourOrderModule(ALModule):
         # we have our Python broker connected to NAOqi broker
 
         # Create a proxy to ALTextToSpeech for later use
-        # TO DO: give port and IP to proxy??
         self.tts = ALProxy("ALTextToSpeech")
         self.blobProxy = ALProxy("ALColorBlobDetection")
         self.motionProxy  = ALProxy("ALMotion")
@@ -45,6 +44,7 @@ class ColourOrderModule(ALModule):
         self.postureProxy.goToPosture("Stand", 0.5)
         self.moovementProxy = ALProxy("ALAutonomousMoves")
         self.moovementProxy.setExpressiveListeningEnabled(False) #hoer auf rumzuzappeln
+        self.distance = 1365#mm x-distance between camera and blob = b
 
         global memory
         memory = ALProxy("ALMemory")
@@ -119,7 +119,9 @@ class ColourOrderModule(ALModule):
         """subscribe to blop event"""
 
         self.blobProxy.setColor(red, green, blue, 50)
-        self.blobProxy.setObjectProperties(10, 5, "Circle")
+        #self.blobProxy.setObjectProperties(10, 5) TODO testen ob das der abstand ist
+        self.blobProxy.setObjectProperties(10, self.distance/1000)
+
 
 
         memory.subscribeToEvent("ALTracker/ColorBlobDetected",
@@ -176,10 +178,10 @@ class ColourOrderModule(ALModule):
         print"y value of blob in percent from left pic side is %s"%x_value_pic
 
         # use sin(alpha)/a = sin(beta)/b to get horizon_length
-        distance = 1365#mm x-distance between camera and blob = b
-        print"distance of blob is %s"%distance
 
-        horizon_length = 2*distance*sin(camera_horizontal_angle/2)/sin(90-camera_horizontal_angle/2) #=a, betha=180-90-60.97/2
+        print"distance of blob is %s"%self.distance
+
+        horizon_length = 2*self.distance*sin(camera_horizontal_angle/2)/sin(90-camera_horizontal_angle/2) #=a, betha=180-90-60.97/2
         #horizon_length = 600
 
         print"Horizon length is %s"%horizon_length
@@ -195,14 +197,14 @@ class ColourOrderModule(ALModule):
             ellbow_roll = -pi/2
 
             distance_to_shoulder = dy_shoulder-distance_to_center #TODO checken was passiert wenn negativ? (weiter rechts als re. schulter)
-            angle_for_pointing = atan2(distance_to_shoulder, distance)
+            angle_for_pointing = atan2(distance_to_shoulder, self.distance)
             handName = "RHand"
 
         else:
             target = "LArm"
             distance_to_shoulder = distance_to_center-dy_shoulder
             ellbow_roll = pi/2
-            angle_for_pointing = atan2(distance_to_shoulder, distance)
+            angle_for_pointing = atan2(distance_to_shoulder, self.distance)
             handName = "LHand"
 
         print"y distance of blob to robots right shoulder is %s"%distance_to_shoulder

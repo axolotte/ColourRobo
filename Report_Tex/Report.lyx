@@ -1,9 +1,9 @@
-#LyX file created by tex2lyx 2.2
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
 \lyxformat 508
 \begin_document
 \begin_header
 \save_transient_properties true
-\origin /opt/ColourRobo/Report_Tex/
+\origin unavailable
 \textclass article
 \begin_preamble
 
@@ -15,8 +15,6 @@
 %opening
 \title{RoboCup Final Project Report \\ Color Detection }
 \author{Jakob Stimpfl \and Charlotte Burmeister}
-
-
 \end_preamble
 \use_default_options false
 \maintain_unincluded_children false
@@ -85,11 +83,11 @@
 \begin_body
 
 \begin_layout Standard
-
 \begin_inset ERT
 status collapsed
 
 \begin_layout Plain Layout
+
 
 \backslash
 maketitle
@@ -111,11 +109,14 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-The Nao robot is a humanoid robot produced by Aldebaran. It is 574 mm high and has xx joints, controlled by stepper motors.+
+The Nao robot is a humanoid robot produced by Aldebaran.
+ It is 574 mm high and has xx joints, controlled by stepper motors.+
 \end_layout
 
 \begin_layout Standard
-In this project to goal was to enable the robot to listen to a color, interpret the color heard as RGB values and then point to this color.
+In this project to goal was to enable the robot to listen to a color, interpret
+ the color heard as RGB values, search for that color in a set distance
+ in front of him and then point to this color.
 \end_layout
 
 \begin_layout Section
@@ -123,10 +124,12 @@ Implementation
 \end_layout
 
 \begin_layout Standard
-As predetermined by the course the Python Software Development Kit (SDK) was used. This SDK provides the use of C++ modules and enables the user to create own Python modules.
+As predetermined by the course the Python Software Development Kit (SDK)
+ was used.
+ This SDK provides the use of C++ modules and enables the user to create
+ own Python modules.
 \begin_inset CommandInset citation
 LatexCommand cite
-after ""
 key "API"
 
 \end_inset
@@ -139,11 +142,131 @@ Speech Detection
 \end_layout
 
 \begin_layout Standard
-The first part of the project aims at implementing a speech recognition and distinguish the different colors. Therefore the module "ALSpeechRecognition" was used. It provides the event listener "WordRecognized". When subscribed to this module, an event is thrown when a word is recognized from the vocabulary list which is specified beforehand. Once the event is detected and thrown, the program jumps to the method "OnColorHeard", there a simple if-query determines the color. Afterwards the next method is called which is described in the following section. 
+The first part of the project aims at implementing a speech recognition
+ and distinguish the different colors.
+ Therefore the module "ALSpeechRecognition" was used.
+ It provides the event listener "WordRecognized".
+ When subscribed to this module, an event is thrown when a word is recognized
+ from the vocabulary list which is specified beforehand.
+ Once the event is detected and thrown, the program jumps to the method
+ "OnColorHeard", there a simple if-query determines the color.
+ Afterwards the next method is called with tho colors Red-Green-Blue values
+ which is described in the following section.
+ 
 \end_layout
 
 \begin_layout Subsection
-Color Detection and Movement
+Color Detection
+\end_layout
+
+\begin_layout Standard
+Since the API provides a module 
+\begin_inset Quotes eld
+\end_inset
+
+ALColorBlobDetection
+\begin_inset Quotes erd
+\end_inset
+
+ for finding a color-blob we could use that one.
+ To find the color we want to search for, we have to set its RGB-Values
+ and a threshold with the methode 
+\begin_inset Quotes eld
+\end_inset
+
+setColor(r, g, b, th)
+\begin_inset Quotes erd
+\end_inset
+
+.
+ By try and error we found out, that a threshold of 50 seems to produce
+ good results.
+ Additionaly we set the minimal size of our blob to 10 pixels and its distance
+ depending the distance we want to search for in: 
+\begin_inset Quotes eld
+\end_inset
+
+setObjectProperties(10, distance)
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Then we subscribe for the 
+\begin_inset Quotes eld
+\end_inset
+
+onColorDetected
+\begin_inset Quotes erd
+\end_inset
+
+-event.
+ If that event is thrown in the eventhandler we use the 
+\begin_inset Quotes eld
+\end_inset
+
+getCircle()
+\begin_inset Quotes erd
+\end_inset
+
+-methode to determine the to the width of our picture relative x-value.
+ 
+\end_layout
+
+\begin_layout Subsection
+Movement
+\end_layout
+
+\begin_layout Standard
+As described in the previuos section at this point we have an x-value which
+ we can use to calculate the angle we have to moove our arm in, to point
+ at our object.
+ As a first distinction we determine whether this x-value is greater than
+ 0.5.
+ In that case we use the right arm otherwise the left.
+ Since the calculation for the left arm is the same then for the right with
+ the small difference, that the pointing-angle has to be negated, we will
+ subsequently explain the calculations only for the right arm.
+ 
+\end_layout
+
+\begin_layout Standard
+Since we have the normalized x-value counted from the left side of the picture
+ we have to calculate the distance from the robots center by multiplying
+ it with the horizon-lenght which in by our definition is the size an object
+ could maximal have, in the set distance, so that the robot could still
+ see all of it.
+ For that we need annother parameter, by name, the opening angle of our
+ camera, defined in the documentation 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DOC"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Given the distance robot to object and the horizontal distance from the
+ robots center (x-value) we 
+\end_layout
+
+\begin_layout Section
+Difficulties and future prospects
+\end_layout
+
+\begin_layout Subsection
+Expressive Listening
+\end_layout
+
+\begin_layout Subsection
+Blob detection
+\end_layout
+
+\begin_layout Standard
+As a future improvement the minimal blob size should be adjusted dependending
+ on the distance if the size of the searched object is given.
 \end_layout
 
 \begin_layout Section
@@ -155,7 +278,9 @@ Goals reached
 \end_layout
 
 \begin_layout Standard
-The robot is able to listen to a color, detect this color and point towards it. 
+The robot is able to listen to a color, detect this color and point towards
+ it.
+ 
 \end_layout
 
 \begin_layout Paragraph
@@ -163,15 +288,24 @@ Limitations
 \end_layout
 
 \begin_layout Standard
-So far only the colors which are specified in the code can be detected by the robot. This limits the interaction possiblities. A more interactive approach would be that any color could be said or that the words can be specified by the person interacting with the robot, e.g. via speech input. But permitting the robot to detect more colors is difficult, as colors appear quite different in changing light conditions. Distinguishing black, red, blue and green is easier as the RGB values are very different.
+So far only the colors which are specified in the code can be detected by
+ the robot.
+ This limits the interaction possiblities.
+ A more interactive approach would be that any color could be said or that
+ the words can be specified by the person interacting with the robot, e.g.
+ via speech input.
+ But permitting the robot to detect more colors is difficult, as colors
+ appear quite different in changing light conditions.
+ Distinguishing black, red, blue and green is easier as the RGB values are
+ very different.
 \end_layout
 
 \begin_layout Standard
-
 \begin_inset ERT
 status collapsed
 
 \begin_layout Plain Layout
+
 
 \backslash
 printbibliography
