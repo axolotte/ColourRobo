@@ -44,8 +44,11 @@ class ColourOrderModule(ALModule):
         self.postureProxy.goToPosture("Stand", 0.5)
         self.moovementProxy = ALProxy("ALAutonomousMoves")
         self.moovementProxy.setExpressiveListeningEnabled(False) #hoer auf rumzuzappeln
-        self.distance = 1365#mm x-distance between camera and blob = b
-
+        self.videoProxy = ALProxy("ALPhotoCapture")
+        self.distance = 500#mm x-distance between camera and blob = b
+        print "CameraID = %s"%self.videoProxy.getCameraID()
+        #print "Resolution = %s"%self.videoProxy.setResolution()
+        print "Resolution = %s"%self.videoProxy.getResolution()
         global memory
         memory = ALProxy("ALMemory")
 
@@ -119,8 +122,8 @@ class ColourOrderModule(ALModule):
         """subscribe to blop event"""
 
         self.blobProxy.setColor(red, green, blue, 50)
-        #self.blobProxy.setObjectProperties(10, 5) TODO testen ob das der abstand ist
-        self.blobProxy.setObjectProperties(10, self.distance/1000)
+        self.blobProxy.setObjectProperties(10, 2) #TODO testen ob das der abstand ist
+        #self.blobProxy.setObjectProperties(10, self.distance/1000)
 
 
 
@@ -149,11 +152,11 @@ class ColourOrderModule(ALModule):
             memory.subscribeToEvent("ALTracker/ColorBlobDetected",
                                       "ColourOrder", "onColorDetected")
         else:
-            print "circle_coordinates = %s"%circle_coordinates
+            print "circle_coordinates = %s"%(circle_coordinates[0]/160)
             str = "I can see one over there!"
             #self.tts.say(str)
             print str
-            self.point_at_circle(circle_coordinates[0])
+            self.point_at_circle(circle_coordinates[0]/160)
             time.sleep(2)
 
             # Subscribe again to the event
@@ -209,7 +212,7 @@ class ColourOrderModule(ALModule):
 
         print"y distance of blob to robots right shoulder is %s"%distance_to_shoulder
 
-        targetAngles  = [0, angle_for_pointing,ellbow_roll,0,0,90]
+        targetAngles  = [0, angle_for_pointing,ellbow_roll,0,0,pi]
 
         print "angle = %s"%(angle_for_pointing*almath.TO_DEG)
 
